@@ -59,6 +59,7 @@
           }
         }
       }
+    }
   },
   "components": {
     "schemas": {
@@ -89,18 +90,6 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/Entry"
-        }
-      },
-      "Error": {
-        "type": "object",
-        "required": [
-          "message"
-        ],
-        "properties": {
-          "message": {
-            "description": "A human readable error message",
-            "type": "string"
-          }
         }
       }
     }
