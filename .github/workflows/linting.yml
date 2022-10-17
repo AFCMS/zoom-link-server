@@ -1,7 +1,10 @@
 ---
 name: Linting
 
-on: ["push", "pull", "workflow_dispatch"]
+on:
+  - push: [master]
+  - pull: [master]
+  - workflow_dispatch:
 
 jobs:
   main:
