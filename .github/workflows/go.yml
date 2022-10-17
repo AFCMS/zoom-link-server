@@ -20,7 +20,7 @@ jobs:
     - name: Set up NodeJS
       uses: actions/setup-node@v1
       with:
-          node-version: "16.x"
+        node-version: "16.x"
     
     - name: Install newman
       run: | 
@@ -28,4 +28,6 @@ jobs:
         npm install -g newman-reporter-htmlextra
 
     - name: Build
-      run: go build -v ./...
+      run: |
+        go get zoom-link-server
+        go build -v ./...
