@@ -1,0 +1,32 @@
+---
+name: Go
+
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+    
+    - name: Set up NodeJS
+      uses: actions/setup-node@v1
+      with:
+          node-version: "16.x"
+    
+    - name: Install newman
+      run: | 
+       npm install -g newman
+       npm install -g newman-reporter-htmlextra
+
+    - name: Build
+      run: go build -v ./...
+
