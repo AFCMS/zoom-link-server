@@ -18,7 +18,9 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/all", func(ctx *fiber.Ctx) error {
+	api := app.Group("/api")
+
+	api.Get("/all", func(ctx *fiber.Ctx) error {
 		var b []Entry
 
 		r := DB.Find(&b)
@@ -41,7 +43,7 @@ func main() {
 		return ctx.Status(fiber.StatusOK).JSON(out)
 	})
 
-	app.Post("/create", func(ctx *fiber.Ctx) error {
+	api.Post("/create", func(ctx *fiber.Ctx) error {
 		var input JSONCreateEntry
 
 		if err := ctx.BodyParser(&input); err != nil {
@@ -62,7 +64,7 @@ func main() {
 		return ctx.Status(fiber.StatusOK).JSON("Created")
 	})
 
-	app.Post("/delete", func(ctx *fiber.Ctx) error {
+	api.Post("/delete", func(ctx *fiber.Ctx) error {
 		var input JSONDeleteEntry
 
 		if err := ctx.BodyParser(&input); err != nil {
