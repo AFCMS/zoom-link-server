@@ -3,46 +3,25 @@
   "info": {
     "version": "v0.0",
     "title": "Zoom Link Server API",
-    "description": "Buy or rent spacecrafts"
+    "description": "Interact with the service"
   },
   "paths": {
-    "/spacecrafts/{spacecraftId}": {
-      "parameters": [
-        {
-          "name": "spacecraftId",
-          "description": "The unique identifier of the spacecraft",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "$ref": "#/components/schemas/SpacecraftId"
-          }
-        }
-      ],
+    "/api/all": {
       "get": {
-        "summary": "Read a spacecraft",
+        "summary": "Get all entries",
         "responses": {
           "200": {
-            "description": "The spacecraft corresponding to the provided `spacecraftId`",
+            "description": "The list of all entries",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Spacecraft"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No spacecraft found for the provided `spacecraftId`",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/EntryList"
                 }
               }
             }
           },
           "500": {
-            "description": "Unexpected error",
+            "description": "An error occured when interacting with database",
             "content": {
               "application/json": {
                 "schema": {
@@ -53,15 +32,41 @@
           }
         }
       }
-    }
+    },
+    "/api/create": {
+      "post": {
+        "summary": "Create a new entry",
+        "responses": {
+          "200": {
+            "description": "The list of all entries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "An error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
   },
   "components": {
     "schemas": {
-      "SpacecraftId": {
-        "description": "The unique identifier of a spacecraft",
+      "EntryID": {
+        "description": "The unique identifier of an  entry",
         "type": "string"
       },
-      "Spacecraft": {
+      "Entry": {
         "type": "object",
         "required": [
           "id",
@@ -70,24 +75,20 @@
         ],
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/SpacecraftId"
-          },
-          "name": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "capsule",
-              "probe",
-              "satellite",
-              "spaceplane",
-              "station"
-            ]
+            "$ref": "#/components/schemas/EntryID"
           },
           "description": {
             "type": "string"
+          },
+          "creation_date": {
+            "type": "integer"
           }
+        }
+      },
+      "EntryList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Entry"
         }
       },
       "Error": {
@@ -102,18 +103,6 @@
           }
         }
       }
-    },
-    "securitySchemes": {
-      "ApiKey": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-Api-Key"
-      }
     }
-  },
-  "security": [
-    {
-      "ApiKey": []
-    }
-  ]
+  }
 }
