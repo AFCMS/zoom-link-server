@@ -1,0 +1,85 @@
+package main
+
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
+	"gorm.io/gorm"
+	"log"
+	"os"
+	"time"
+)
+
+var DB *gorm.DB
+
+func main() {
+	_ = godotenv.Load()
+
+	DB = InitDatabase()
+
+	app := fiber.New()
+
+	app.Get("/all", func(ctx *fiber.Ctx) error {
+		var b []Entry
+
+		r := DB.Find(&b)
+		if r.Error != nil {
+			return ctx.Status(fiber.StatusInternalServerError).JSON("Internal Error")
+		}
+
+		var out []JSONEntry
+
+		for i := 0; i < len(b); i++ {
+			out = append(out, JSONEntry{
+				ID:           b[i].ID,
+				Description:  b[i].Description,
+				CreationDate: b[i].CreationDate,
+				MeetingID:    b[i].MeetingID,
+				Passcode:     b[i].Passcode,
+			})
+		}
+
+		return ctx.Status(fiber.StatusOK).JSON(out)
+	})
+
+	app.Post("/create", func(ctx *fiber.Ctx) error {
+		var input JSONCreateEntry
+
+		if err := ctx.BodyParser(&input); err != nil {
+			return ctx.Status(fiber.StatusBadRequest).JSON(err.Error())
+		}
+
+		r := DB.Create(&Entry{
+			Description:  input.Description,
+			CreationDate: time.Now().Unix(),
+			MeetingID:    input.MeetingID,
+			Passcode:     input.Passcode,
+		})
+
+		if r.Error != nil {
+			return ctx.Status(fiber.StatusBadRequest).JSON("Invalid parameters")
+		}
+
+		return ctx.Status(fiber.StatusOK).JSON("Created")
+	})
+
+	app.Post("/delete", func(ctx *fiber.Ctx) error {
+		var input JSONDeleteEntry
+
+		if err := ctx.BodyParser(&input); err != nil {
+			return ctx.Status(fiber.StatusBadRequest).JSON(err.Error())
+		}
+
+		r := DB.Delete(&Entry{
+			ID: input.ID,
+		})
+
+		if r.Error != nil {
+			return ctx.Status(fiber.StatusBadRequest).JSON("Invalid ID")
+		}
+		log.Println("ERROR: ", r.Error)
+
+		return ctx.Status(fiber.StatusOK).JSON("Deleted")
+	})
+
+	log.Fatal(app.Listen(":" + string(os.Getenv("PORT"))))
+}

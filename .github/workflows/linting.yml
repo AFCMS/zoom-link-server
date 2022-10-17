@@ -1,0 +1,14 @@
+---
+name: Linting
+
+on: ["push", "pull", "workflow_dispatch"]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: github/super-linter@v4.9.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
