@@ -9,10 +9,10 @@ import (
 
 type Entry struct {
 	gorm.Model
-	ID           uint   `gorm:"primarykey"`
+	ID           uint   `gorm:"primarykey;unique;autoIncrement"`
 	Description  string `gorm:"not null;unique"`
 	CreationDate int64  `gorm:"not null"`
-	MeetingID    int32  `gorm:"not null;unique"`
+	MeetingID    int32  `gorm:"not null;unique;check:meeting_id between 0 and 999999999"`
 	Passcode     string `gorm:"default:"`
 }
 
