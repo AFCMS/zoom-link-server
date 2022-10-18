@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
-	"gorm.io/gorm"
 	"log"
 	"os"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -17,6 +18,8 @@ func main() {
 	DB = InitDatabase()
 
 	app := fiber.New()
+
+	//app.Use(flogger.New())
 
 	api := app.Group("/api")
 
@@ -82,6 +85,9 @@ func main() {
 
 		return ctx.Status(fiber.StatusOK).JSON("Deleted")
 	})
+
+	app.Static("/", "./frontend/build")
+	app.Static("*", "./frontend/build/index.html")
 
 	log.Fatal(app.Listen(":" + string(os.Getenv("PORT"))))
 }
