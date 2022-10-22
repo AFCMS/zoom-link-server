@@ -100,8 +100,8 @@ function App() {
 	}
 
 	return (
-		<div className="flex w-screen flex-row items-center justify-center p-0 md:p-2">
-			<div className="flex w-full columns-3 flex-col bg-slate-200 md:w-2/6 md:rounded md:border md:border-slate-700">
+		<div className="flex w-screen flex-row items-center justify-center p-0 sm:p-2">
+			<div className="flex w-full columns-3 flex-col bg-slate-200 sm:w-4/6 sm:rounded sm:border sm:border-slate-700 md:w-4/6 lg:w-3/6 xl:w-2/6">
 				<div className="flex h-16 w-full items-center bg-blue-500 p-5">
 					<h1 className="h-max w-2/3 text-3xl font-bold text-blue-900">Zoom Link Server</h1>
 					<div className="w-1/3">
