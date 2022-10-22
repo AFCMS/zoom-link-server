@@ -1,7 +1,14 @@
 import axios from "axios"
 import "./App.css"
 import { useEffect, useState } from "react"
-import { PlusIcon, ArrowUpRightIcon, ComputerDesktopIcon, CommandLineIcon } from "@heroicons/react/24/solid"
+import {
+	PlusIcon,
+	ArrowUpRightIcon,
+	ComputerDesktopIcon,
+	CommandLineIcon,
+	TrashIcon,
+	InformationCircleIcon,
+} from "@heroicons/react/24/solid"
 
 /**
  * @param {string} val
@@ -32,6 +39,7 @@ function App() {
 	const [addDescription, setAddDescription] = useState("")
 	const [addMeetingID, setAddMeetingID] = useState("")
 	const [addPasscode, setAddPasscode] = useState("")
+	const [addPasscodeHash, setAddPasscodeHash] = useState("")
 	const [addOpen, setAddOpen] = useState(false)
 
 	const [reload, setReload] = useState(0)
@@ -50,15 +58,22 @@ function App() {
 
 	function create_entry() {
 		setLoadingCreate(true)
+		console.log(addMeetingID, ":", parseInt(addMeetingID))
 		axios
 			.post(url + "api/create", {
 				description: addDescription,
 				meeting_id: parseInt(addMeetingID),
 				passcode: addPasscode,
+				passcode_hash: addPasscodeHash,
 			})
 			.then((response) => {
 				console.log(response)
 				setLoadingCreate(false)
+				setAddOpen(false)
+				setAddDescription("")
+				setAddMeetingID("")
+				setAddPasscode("")
+				setAddPasscodeHash("")
 				setReload(reload + 1)
 			})
 			.catch(() => {
@@ -66,8 +81,22 @@ function App() {
 			})
 	}
 
+	/**
+	 * @param {integer} n
+	 */
+	function delete_entry(n) {
+		axios
+			.post(url + "api/delete", {
+				id: n,
+			})
+			.then((response) => {
+				setReload(reload + 1)
+			})
+			.catch()
+	}
+
 	return (
-		<div className="flex w-screen flex-row items-center justify-center bg-slate-100 p-0 md:p-2">
+		<div className="flex w-screen flex-row items-center justify-center p-0 md:p-2">
 			<div className="flex w-full columns-3 flex-col bg-slate-200 md:w-2/6 md:rounded md:border md:border-slate-700">
 				<div className="flex h-16 w-full items-center bg-blue-500 p-5">
 					<h1 className="h-max w-2/3 text-3xl font-bold text-blue-900">Zoom Link Server</h1>
@@ -106,9 +135,13 @@ function App() {
 					<span className="h-max text-xl text-black">Create Entry</span>
 					<div className="mt-1 flex w-full flex-row items-center">
 						<div className="text inline w-1/4">Description:</div>
+						<InformationCircleIcon
+							className="zl-text-icon"
+							title="The description of the entry. Make sure to make it good!"
+						/>
 						<input
 							type="text"
-							className={`inline w-3/4 rounded border-2 bg-slate-300 pl-1 ${
+							className={`zl-text-field ${
 								addDescription.length > 0 ? "border-green-500" : "border-red-500"
 							}`}
 							value={addDescription}
@@ -121,9 +154,10 @@ function App() {
 					</div>
 					<div className="mt-1 flex w-full flex-row items-center">
 						<div className="text inline w-1/4">Meeting ID:</div>
+						<InformationCircleIcon className="zl-text-icon" title="The ID of the meeting" />
 						<input
 							type="text"
-							className={`inline w-3/4 rounded border-2 border-slate-600 bg-slate-300 pl-1 ${
+							className={`zl-text-field ${
 								addMeetingID.length === 9 ? "border-green-500" : "border-red-500"
 							}`}
 							value={addMeetingID}
@@ -138,9 +172,13 @@ function App() {
 					</div>
 					<div className="mt-1 flex w-full flex-row items-center">
 						<div className="text inline w-1/4">Passcode:</div>
+						<InformationCircleIcon
+							className="zl-text-icon"
+							title="The meeting passcode. Unlike the hash version, it will just be copied instead of included into the join link."
+						/>
 						<input
 							type="text"
-							className={`inline w-3/4 rounded border-2 border-slate-600 bg-slate-300 pl-1`}
+							className={"zl-text-field"}
 							value={addPasscode}
 							onChange={(e) => {
 								console.log(e.target.value)
@@ -149,6 +187,25 @@ function App() {
 								//}
 							}}
 							placeholder="SuperStrongPasscode (optional)"
+						/>
+					</div>
+					<div className="mt-1 flex w-full flex-row items-center">
+						<div className="text inline w-1/4">Passcode Hash:</div>
+						<InformationCircleIcon
+							className="zl-text-icon"
+							title="The meeting passcode in hash form. It is used to create links which include the passcode. You can still provide the raw passcode if you want."
+						/>
+						<input
+							type="text"
+							className={"zl-text-field"}
+							value={addPasscodeHash}
+							onChange={(e) => {
+								console.log(e.target.value)
+								//if (validate_id(e.target.value)) {
+								setAddPasscodeHash(e.target.value)
+								//}
+							}}
+							placeholder="Passcode Hash (optional)"
 						/>
 					</div>
 					<button
@@ -182,7 +239,15 @@ function App() {
 													key={e.id}
 												>
 													<div className="flex w-3/4 flex-col">
-														<div className="h-max text-xl text-black">{e.description}</div>
+														<div className="h-max text-xl text-black">
+															{e.description}
+															<TrashIcon
+																className="ml-1 inline h-5 w-5 overflow-auto text-transparent hover:text-slate-900"
+																onClick={() => {
+																	delete_entry(e.id)
+																}}
+															/>
+														</div>
 														<div className="text-start mt-1 h-max text-lg text-slate-700">
 															<span className="mr-4">Meeting ID:</span>
 															<span className="mr-4">{e.meeting_id}</span>
@@ -206,7 +271,7 @@ function App() {
 													<div className="flex w-1/4 flex-col pt-2 pb-2">
 														<a
 															className="flex flex-row rounded bg-blue-500 p-1 text-sm"
-															href={`https://zoom.us/j/${e.meeting_id}`}
+															href={`https://zoom.us/wc/join/${e.meeting_id}`}
 															target="_blank"
 															rel="noopener noreferrer"
 														>
