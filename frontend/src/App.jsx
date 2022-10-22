@@ -282,6 +282,11 @@ function App() {
 															href={`https://zoom.us/wc/join/${e.meeting_id}`}
 															target="_blank"
 															rel="noopener noreferrer"
+															onClick={() => {
+																if (e.passcode) {
+																	navigator.clipboard.writeText(e.passcode)
+																}
+															}}
 														>
 															<span className="hidden md:inline">Open in Browser</span>
 															<span className="inline md:hidden">Browser</span>
@@ -290,6 +295,11 @@ function App() {
 														<a
 															className="mt-2 flex flex-row rounded bg-blue-500 p-1 text-sm"
 															href="zoomus://"
+															onClick={() => {
+																if (e.passcode) {
+																	navigator.clipboard.writeText(e.passcode)
+																}
+															}}
 														>
 															<span className="hidden md:inline">Open in App</span>
 															<span className="inline md:hidden">App</span>
