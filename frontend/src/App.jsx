@@ -16,8 +16,8 @@ import {
  * @return {boolean}
  */
 function validate_id(val) {
-	console.log(val.length)
-	console.log("parsed:", parseInt(val, 10))
+	//console.log(val.length)
+	//console.log("parsed:", parseInt(val, 10))
 	if (val.length >= 0 && val.length <= 9) {
 		if (parseInt(val, 10) || val.length === 0) {
 			return true
@@ -34,7 +34,6 @@ function App() {
 
 	const [loading, setLoading] = useState(true)
 	const [entries, setEntries] = useState(null)
-	const [error, setError] = useState(null)
 	const [loadingCreate, setLoadingCreate] = useState(false)
 	const [loadingError, setLoadingError] = useState(null)
 
@@ -43,6 +42,7 @@ function App() {
 	const [addPasscode, setAddPasscode] = useState("")
 	const [addPasscodeHash, setAddPasscodeHash] = useState("")
 	const [addOpen, setAddOpen] = useState(false)
+	const [addError, setAddError] = useState(null)
 
 	const [reload, setReload] = useState(0)
 
@@ -53,14 +53,15 @@ function App() {
 				setLoading(false)
 				setEntries(response.data)
 			})
-			.catch(() => {
-				setError("An error occured")
+			.catch((e) => {
+				setLoading(false)
+				setLoadingError(e.message)
 			})
 	}, [reload, url])
 
 	function create_entry() {
 		setLoadingCreate(true)
-		console.log(addMeetingID, ":", parseInt(addMeetingID))
+		//console.log(addMeetingID, ":", parseInt(addMeetingID))
 		axios
 			.post(url + "api/create", {
 				description: addDescription,
@@ -69,7 +70,7 @@ function App() {
 				passcode_hash: addPasscodeHash,
 			})
 			.then((response) => {
-				console.log(response)
+				//console.log(response)
 				setLoadingCreate(false)
 				setAddOpen(false)
 				setAddDescription("")
@@ -80,7 +81,7 @@ function App() {
 			})
 			.catch((e) => {
 				setLoadingCreate(false)
-				setLoadingError(e.message)
+				setAddError(e.message)
 			})
 	}
 
@@ -120,7 +121,7 @@ function App() {
 						onClick={(e) => {
 							if (addOpen) {
 								setAddOpen(false)
-								setLoadingError(null)
+								setAddError(null)
 							} else {
 								setAddOpen(true)
 							}
@@ -150,7 +151,6 @@ function App() {
 							}`}
 							value={addDescription}
 							onChange={(e) => {
-								console.log(e.target.value)
 								setAddDescription(e.target.value)
 							}}
 							placeholder="Description of the entry"
@@ -166,7 +166,6 @@ function App() {
 							}`}
 							value={addMeetingID}
 							onChange={(e) => {
-								//console.log(e.target.value);
 								if (validate_id(e.target.value)) {
 									setAddMeetingID(e.target.value)
 								}
@@ -185,10 +184,7 @@ function App() {
 							className={"zl-text-field"}
 							value={addPasscode}
 							onChange={(e) => {
-								console.log(e.target.value)
-								//if (validate_id(e.target.value)) {
 								setAddPasscode(e.target.value)
-								//}
 							}}
 							placeholder="SuperStrongPasscode (optional)"
 						/>
@@ -204,7 +200,6 @@ function App() {
 							className={"zl-text-field"}
 							value={addPasscodeHash}
 							onChange={(e) => {
-								console.log(e.target.value)
 								//if (validate_id(e.target.value)) {
 								setAddPasscodeHash(e.target.value)
 								//}
@@ -212,9 +207,9 @@ function App() {
 							placeholder="Passcode Hash (optional)"
 						/>
 					</div>
-					<div className={`mt-1 h-7 w-full text-red-600 ${loadingError ? "block" : "hidden"}`}>
+					<div className={`mt-1 h-7 w-full text-red-800 ${addError ? "block" : "hidden"}`}>
 						<ExclamationTriangleIcon className="inline h-7" />
-						<span className="ml-2 inline">{loadingError}</span>
+						<span className="ml-2 inline">{addError}</span>
 					</div>
 					<button
 						className="mt-2 h-8 w-full rounded bg-slate-700"
@@ -229,9 +224,14 @@ function App() {
 				<div className="flex flex-col justify-center p-2 pt-0">
 					{(() => {
 						if (loading === true) {
-							return <div className="mt-2 items-center">Loading...</div>
-						} else if (error) {
-							return <div className="mt-2 items-center">Error</div>
+							return <div className="mt-2 h-7 items-center">Loading...</div>
+						} else if (loadingError) {
+							return (
+								<div className="mt-2 h-7 items-center text-red-800">
+									<ExclamationTriangleIcon className="inline h-7" />
+									<span className="ml-2">{loadingError}</span>
+								</div>
+							)
 						} else {
 							return (
 								<>
