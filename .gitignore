@@ -3,3 +3,4 @@ zoom-link-server
 .env
 database.db
 .idea
+.env.local

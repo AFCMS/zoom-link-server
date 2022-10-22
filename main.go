@@ -13,7 +13,7 @@ import (
 var DB *gorm.DB
 
 func main() {
-	_ = godotenv.Load()
+	_ = godotenv.Load(".env", ".env.local")
 
 	DB = InitDatabase()
 
@@ -58,6 +58,7 @@ func main() {
 			CreationDate: time.Now().Unix(),
 			MeetingID:    input.MeetingID,
 			Passcode:     input.Passcode,
+			PasscodeHash: input.PasscodeHash,
 		})
 
 		if r.Error != nil {
@@ -89,5 +90,8 @@ func main() {
 	app.Static("/", "./frontend/build")
 	app.Static("*", "./frontend/build/index.html")
 
-	log.Fatal(app.Listen(":" + string(os.Getenv("PORT"))))
+	log.Println(os.Getenv("ZLS_HOST"))
+	log.Println(string(os.Getenv("ZLS_HOST")) + ":" + string(os.Getenv("ZLS_PORT")))
+
+	log.Fatal(app.Listen(string(os.Getenv("ZLS_HOST")) + ":" + string(os.Getenv("ZLS_PORT"))))
 }
