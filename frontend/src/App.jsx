@@ -8,6 +8,7 @@ import {
 	CommandLineIcon,
 	TrashIcon,
 	InformationCircleIcon,
+	ExclamationTriangleIcon,
 } from "@heroicons/react/24/solid"
 
 /**
@@ -35,6 +36,7 @@ function App() {
 	const [entries, setEntries] = useState(null)
 	const [error, setError] = useState(null)
 	const [loadingCreate, setLoadingCreate] = useState(false)
+	const [loadingError, setLoadingError] = useState(null)
 
 	const [addDescription, setAddDescription] = useState("")
 	const [addMeetingID, setAddMeetingID] = useState("")
@@ -54,7 +56,7 @@ function App() {
 			.catch(() => {
 				setError("An error occured")
 			})
-	}, [reload])
+	}, [reload, url])
 
 	function create_entry() {
 		setLoadingCreate(true)
@@ -76,8 +78,9 @@ function App() {
 				setAddPasscodeHash("")
 				setReload(reload + 1)
 			})
-			.catch(() => {
+			.catch((e) => {
 				setLoadingCreate(false)
+				setLoadingError(e.message)
 			})
 	}
 
@@ -117,6 +120,7 @@ function App() {
 						onClick={(e) => {
 							if (addOpen) {
 								setAddOpen(false)
+								setLoadingError(null)
 							} else {
 								setAddOpen(true)
 							}
@@ -207,6 +211,10 @@ function App() {
 							}}
 							placeholder="Passcode Hash (optional)"
 						/>
+					</div>
+					<div className={`mt-1 h-7 w-full text-red-600 ${loadingError ? "block" : "hidden"}`}>
+						<ExclamationTriangleIcon className="inline h-7" />
+						<span className="ml-2 inline">{loadingError}</span>
 					</div>
 					<button
 						className="mt-2 h-8 w-full rounded bg-slate-700"
