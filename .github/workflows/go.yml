@@ -36,7 +36,10 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Build Go
+      - name: Install Go Dependencies
         run: |
           go get zoom-link-server
+
+      - name: Build Go
+        run: |
           go build -v ./...
