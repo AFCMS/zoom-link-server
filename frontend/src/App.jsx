@@ -18,7 +18,7 @@ import {
 function validate_id(val) {
     //console.log(val.length)
     //console.log("parsed:", parseInt(val, 10))
-    if (val.length >= 0 && val.length <= 9) {
+    if (val.length >= 0 && val.length <= 10) {
         if (parseInt(val, 10) || val.length === 0) {
             return true
         } else {
@@ -280,7 +280,11 @@ function App() {
                                                     <div className="flex w-1/4 flex-col truncate pt-2 pb-2">
                                                         <a
                                                             className="flex flex-row rounded bg-blue-500 p-1 text-sm"
-                                                            href={`https://zoom.us/wc/join/${e.meeting_id}`}
+                                                            href={`https://zoom.us/wc/join/${
+                                                                e.passcode_hash
+                                                                    ? e.meeting_id + "?pwd=" + e.passcode_hash
+                                                                    : e.meeting_id
+                                                            }`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             onClick={() => {
