@@ -13,7 +13,7 @@ type Entry struct {
 	ID           uint   `gorm:"primarykey;unique;autoIncrement"`
 	Description  string `gorm:"not null"`
 	CreationDate int64  `gorm:"not null"`
-	MeetingID    int32  `gorm:"not null;check:meeting_id between 0 and 999999999"`
+	MeetingID    int64  `gorm:"not null;check:meeting_id between 0 and 9999999999"`
 	Passcode     string `gorm:""`
 	PasscodeHash string
 }
