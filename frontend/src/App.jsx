@@ -11,6 +11,8 @@ import {
     ExclamationTriangleIcon,
 } from "@heroicons/react/24/solid"
 
+// const regexZoomURL = /zoom\.us\/j\/(\d+)(?:\?pwd=(.+))/
+
 /**
  * @param {string} val
  * @return {boolean}
@@ -99,6 +101,28 @@ function App() {
             .catch()
     }
 
+    /**
+     * @param {React.MouseEventHandler} event
+     */
+    /* async function click_url_handler(event) {
+        const match = await navigator.clipboard.readText().then((e) => e.match(regexZoomURL))
+        if (match) {
+            setAddMeetingID(match[1])
+            setAddPasscodeHash(match[2] ? match[2] : "")
+        }
+    } */
+
+    // Request permission for clipboard read
+    /* navigator.permissions.query({ name: "clipboard-read", allowWithoutGesture: false }).then((permissionStatus) => {
+        // Will be 'granted', 'denied' or 'prompt':
+        console.log(permissionStatus.state)
+
+        // Listen for changes to the permission state
+        permissionStatus.onchange = () => {
+            console.log(permissionStatus.state)
+        }
+    })*/
+
     return (
         <div className="flex w-screen flex-row items-center justify-center p-0 sm:p-2">
             <div className="flex w-full columns-3 flex-col bg-slate-200 sm:w-4/6 sm:rounded sm:border sm:border-slate-700 md:w-4/6 lg:w-3/6 xl:w-2/6">
@@ -138,7 +162,16 @@ function App() {
                 </div>
 
                 <div className={`${addOpen ? "" : "hidden"} m-2 rounded bg-slate-500 p-2 pl-4 transition-all`}>
-                    <span className="h-max text-xl text-black">Create Entry</span>
+                    <div className="flex flex-row">
+                        <span className="h-max text-xl text-black">Create Entry</span>
+                        <div className="grow"></div>
+                        <div
+                            className="justify-center rounded bg-slate-400 p-1 text-center"
+                            //onClick={click_url_handler}
+                        >
+                            From URL
+                        </div>
+                    </div>
                     <div className="mt-1 flex w-full flex-row items-center">
                         <div className="text inline w-1/4">Description:</div>
                         <InformationCircleIcon
