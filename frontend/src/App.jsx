@@ -213,7 +213,9 @@ function App() {
                         <span className="ml-2 inline">{addError}</span>
                     </div>
                     <button
-                        className="mt-2 h-8 w-full rounded bg-slate-700"
+                        className={`mt-2 h-8 w-full rounded bg-slate-700 ${
+                            loadingCreate ? "cursor-wait" : "cursor-default"
+                        }`}
                         onClick={(e) => {
                             create_entry()
                         }}
