@@ -6,7 +6,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.41.0
 	github.com/joho/godotenv v1.4.0
 	gorm.io/driver/sqlite v1.4.4
-	gorm.io/gorm v1.24.3
+	gorm.io/gorm v1.24.4
 )
 
 require (
