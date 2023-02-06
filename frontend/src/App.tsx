@@ -7,35 +7,40 @@ import {
     ComputerDesktopIcon,
     CommandLineIcon,
     TrashIcon,
-    InformationCircleIcon,
     ExclamationTriangleIcon,
 } from "@heroicons/react/24/solid"
 
-// const regexZoomURL = /zoom\.us\/j\/(\d+)(?:\?pwd=(.+))/
+const regexZoomURL = /zoom\.us\/j\/(\d+)(?:\?pwd=(.+))/
 
-/**
- * @param {string} val
- * @return {boolean}
- */
-function validate_id(val) {
+function match_regex(val: string): number | null {
+    var r = regexZoomURL.exec(val)
+    console.log(r)
+    return r ? parseInt(r[0]) : null
+}
+
+function validate_id(val: string): boolean {
     //console.log(val.length)
     //console.log("parsed:", parseInt(val, 10))
     if (val.length >= 0 && val.length <= 10) {
-        if (parseInt(val, 10) || val.length === 0) {
-            return true
-        } else {
-            return false
-        }
+        return !!(parseInt(val, 10) || val.length === 0)
     } else {
         return false
     }
+}
+
+type Entry = {
+    id: number
+    description: string
+    meeting_id: number
+    passcode: string
+    passcode_hash: string
 }
 
 function App() {
     const url = window.location.href
 
     const [loading, setLoading] = useState(true)
-    const [entries, setEntries] = useState(null)
+    const [entries, setEntries] = useState<Entry[] | null>(null)
     const [loadingCreate, setLoadingCreate] = useState(false)
     const [loadingError, setLoadingError] = useState(null)
 
@@ -87,10 +92,7 @@ function App() {
             })
     }
 
-    /**
-     * @param {integer} n
-     */
-    function delete_entry(n) {
+    function delete_entry(n: number) {
         axios
             .post(url + "api/delete", {
                 id: n,
@@ -165,38 +167,41 @@ function App() {
                     <div className="flex flex-row">
                         <span className="h-max text-xl text-black">Create Entry</span>
                         <div className="grow"></div>
-                        <div
-                            className="justify-center rounded bg-slate-400 p-1 text-center"
-                            //onClick={click_url_handler}
-                        >
-                            From URL
-                        </div>
+                        <input
+                            type="text"
+                            className="zl-text-field-paste justify-center rounded bg-slate-400 p-1 text-center"
+                            onPaste={(e) => {
+                                console.log(e.clipboardData.getData("Text"))
+                                var t = e.clipboardData.getData("Text")
+                                var r = match_regex(t)
+                            }}
+                            value={""}
+                            placeholder="From URL"
+                        />
                     </div>
                     <div className="mt-1 flex w-full flex-row items-center">
                         <div className="text inline w-1/4">Description:</div>
-                        <InformationCircleIcon
-                            className="zl-text-icon"
-                            title="The description of the entry. Make sure to make it good!"
-                        />
                         <input
                             type="text"
                             className={`zl-text-field ${
-                                addDescription.length > 0 ? "border-green-500" : "border-red-500"
+                                addDescription.length > 0 && addDescription.trim().length > 0
+                                    ? "border-green-500"
+                                    : "border-red-500"
                             }`}
                             value={addDescription}
                             onChange={(e) => {
                                 setAddDescription(e.target.value)
                             }}
                             placeholder="Description of the entry"
+                            title="The description of the entry. Make sure to make it's good!"
                         />
                     </div>
                     <div className="mt-1 flex w-full flex-row items-center">
                         <div className="text inline w-1/4">Meeting ID:</div>
-                        <InformationCircleIcon className="zl-text-icon" title="The ID of the meeting" />
                         <input
                             type="text"
                             className={`zl-text-field ${
-                                addMeetingID.length === 9 ? "border-green-500" : "border-red-500"
+                                addMeetingID.length === 10 ? "border-green-500" : "border-red-500"
                             }`}
                             value={addMeetingID}
                             onChange={(e) => {
@@ -205,33 +210,27 @@ function App() {
                                 }
                             }}
                             placeholder="123 456 7890"
+                            title="The ID of the meeting"
                         />
                     </div>
                     <div className="mt-1 flex w-full flex-row items-center">
                         <div className="text inline w-1/4">Passcode:</div>
-                        <InformationCircleIcon
-                            className="zl-text-icon"
-                            title="The meeting passcode. Unlike the hash version, it will just be copied instead of included into the join link."
-                        />
                         <input
                             type="text"
-                            className={"zl-text-field"}
+                            className={"zl-text-field zl-text-field-default"}
                             value={addPasscode}
                             onChange={(e) => {
                                 setAddPasscode(e.target.value)
                             }}
                             placeholder="SuperStrongPasscode (optional)"
+                            title="The meeting passcode. Unlike the hash version, it will just be copied instead of included into the join link."
                         />
                     </div>
                     <div className="mt-1 flex w-full flex-row items-center">
                         <div className="text inline w-1/4">Passcode Hash:</div>
-                        <InformationCircleIcon
-                            className="zl-text-icon"
-                            title="The meeting passcode in hash form. It is used to create links which include the passcode. You can still provide the raw passcode if you want."
-                        />
                         <input
                             type="text"
-                            className={"zl-text-field"}
+                            className={"zl-text-field zl-text-field-default"}
                             value={addPasscodeHash}
                             onChange={(e) => {
                                 //if (validate_id(e.target.value)) {
@@ -239,6 +238,7 @@ function App() {
                                 //}
                             }}
                             placeholder="Passcode Hash (optional)"
+                            title="The meeting passcode in hash form. It is used to create links which include the passcode. You can still provide the raw passcode if you want."
                         />
                     </div>
                     <div className={`mt-1 h-7 w-full text-red-800 ${addError ? "block" : "hidden"}`}>
@@ -297,7 +297,7 @@ function App() {
                                                             <span className="mr-4">{e.meeting_id}</span>
 
                                                             {(() => {
-                                                                if (e.passcode && e.passcode.lenght !== 0) {
+                                                                if (e.passcode && e.passcode.length !== 0) {
                                                                     return (
                                                                         <>
                                                                             <span className="mr-4 hidden md:inline">
