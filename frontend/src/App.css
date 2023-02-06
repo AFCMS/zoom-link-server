@@ -8,7 +8,8 @@
 }
 
 .zl-text-field {
-    @apply inline h-7 w-3/4 appearance-none rounded rounded-l-none border-l-2 bg-slate-300 pl-1 caret-slate-700 focus:outline-none;
+    @apply inline h-7 w-3/4 appearance-none rounded rounded-l-none border-l-2 bg-slate-300 pl-1 caret-slate-700
+    focus:outline-none;
 }
 
 .zl-text-field-default {
