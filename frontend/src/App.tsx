@@ -133,6 +133,7 @@ function App() {
                                 var t = e.clipboardData.getData("Text")
                                 var r = match_regex(t)
                             }}
+                            onChange={() => {}}
                             value={""}
                             placeholder="From URL"
                         />
