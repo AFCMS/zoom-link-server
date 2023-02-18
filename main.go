@@ -104,7 +104,6 @@ func main() {
 		if r.Error != nil {
 			return ctx.Status(fiber.StatusBadRequest).JSON("Invalid ID")
 		}
-		log.Println("ERROR: ", r.Error)
 
 		return ctx.Status(fiber.StatusOK).JSON("Deleted")
 	})
