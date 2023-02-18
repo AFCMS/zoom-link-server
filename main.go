@@ -69,6 +69,27 @@ func main() {
 		return ctx.Status(fiber.StatusOK).JSON("Created")
 	})
 
+	api.Patch("/edit", func(ctx *fiber.Ctx) error {
+		var input JSONEditEntry
+
+		if err := ctx.BodyParser(&input); err != nil {
+			return ctx.Status(fiber.StatusBadRequest).JSON(err.Error())
+		}
+
+		r := DB.Model(&Entry{ID: input.ID}).Updates(&Entry{
+			Description:  input.Description,
+			MeetingID:    input.MeetingID,
+			Passcode:     input.Passcode,
+			PasscodeHash: input.PasscodeHash,
+		})
+
+		if r.Error != nil {
+			return ctx.Status(fiber.StatusBadRequest).JSON("Invalid request")
+		}
+
+		return ctx.Status(fiber.StatusOK).JSON("Modified")
+	})
+
 	api.Post("/delete", func(ctx *fiber.Ctx) error {
 		var input JSONDeleteEntry
 
