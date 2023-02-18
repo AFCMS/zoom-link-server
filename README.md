@@ -1,6 +1,12 @@
 # ZOOM Link Server
 
-[Postman Workspace](https://www.postman.com/mineclone2-auth/workspace/zoom-link-server/overview)
+Simple Zoom link sharing server.
+
+Uses the following technologies:
+
+-   **Golang** with the **Fiber** and **GORM** frameworks for the backend
+-   **ReactJS** for frontend
+-   **TailwindCSS** for all CSS
 
 ## Credits
 
