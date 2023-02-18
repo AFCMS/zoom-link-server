@@ -8,7 +8,7 @@ updates:
     assignees:
       - "AFCMS"
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/frontend"
     schedule:
       interval: "daily"
     assignees:
