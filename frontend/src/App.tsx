@@ -1,43 +1,12 @@
 import axios from "axios"
 import "./App.css"
 import { useEffect, useState } from "react"
-import {
-    PlusIcon,
-    ArrowUpRightIcon,
-    ComputerDesktopIcon,
-    CommandLineIcon,
-    TrashIcon,
-    ExclamationTriangleIcon,
-} from "@heroicons/react/24/solid"
-
-const regexZoomURL = /zoom\.us\/j\/(\d+)(?:\?pwd=(.+))/
-
-function match_regex(val: string): number | null {
-    var r = regexZoomURL.exec(val)
-    console.log(r)
-    return r ? parseInt(r[0]) : null
-}
-
-function validate_id(val: string): boolean {
-    //console.log(val.length)
-    //console.log("parsed:", parseInt(val, 10))
-    if (val.length >= 0 && val.length <= 10) {
-        return !!(parseInt(val, 10) || val.length === 0)
-    } else {
-        return false
-    }
-}
-
-type Entry = {
-    id: number
-    description: string
-    meeting_id: number
-    passcode: string
-    passcode_hash: string
-}
+import { PlusIcon, CommandLineIcon, ExclamationTriangleIcon } from "@heroicons/react/24/solid"
+import EntryElement from "./EntryElement"
+import { Entry, match_regex, validate_id, apiUrl } from "./utils"
 
 function App() {
-    const url = window.location.href
+    const url = apiUrl()
 
     const [loading, setLoading] = useState(true)
     const [entries, setEntries] = useState<Entry[] | null>(null)
@@ -55,7 +24,7 @@ function App() {
 
     useEffect(() => {
         axios
-            .get(url + "api/all")
+            .get(url + "/api/all")
             .then((response) => {
                 setLoading(false)
                 setEntries(response.data)
@@ -70,7 +39,7 @@ function App() {
         setLoadingCreate(true)
         //console.log(addMeetingID, ":", parseInt(addMeetingID))
         axios
-            .post(url + "api/create", {
+            .post(url + "/api/create", {
                 description: addDescription,
                 meeting_id: parseInt(addMeetingID),
                 passcode: addPasscode,
@@ -90,17 +59,6 @@ function App() {
                 setLoadingCreate(false)
                 setAddError(e.message)
             })
-    }
-
-    function delete_entry(n: number) {
-        axios
-            .post(url + "api/delete", {
-                id: n,
-            })
-            .then((response) => {
-                setReload(reload + 1)
-            })
-            .catch()
     }
 
     /**
@@ -276,83 +234,7 @@ function App() {
                                     ) : (
                                         entries.map((e) => {
                                             return (
-                                                <div
-                                                    className={
-                                                        "mt-2 flex h-20 w-full items-center rounded bg-zinc-300 p-2 pl-4"
-                                                    }
-                                                    key={e.id}
-                                                >
-                                                    <div className="flex w-3/4 flex-col">
-                                                        <div className="h-max text-xl text-black">
-                                                            {e.description}
-                                                            <TrashIcon
-                                                                className="ml-1 inline h-5 w-5 overflow-auto text-transparent hover:text-slate-900"
-                                                                onClick={() => {
-                                                                    delete_entry(e.id)
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <div className="text-start mt-1 h-max truncate text-lg text-slate-700">
-                                                            <span className="mr-4">Meeting ID:</span>
-                                                            <span className="mr-4">{e.meeting_id}</span>
-
-                                                            {(() => {
-                                                                if (e.passcode && e.passcode.length !== 0) {
-                                                                    return (
-                                                                        <>
-                                                                            <span className="mr-4 hidden md:inline">
-                                                                                Passcode:
-                                                                            </span>
-                                                                            <span className="hidden md:inline">
-                                                                                {e.passcode}
-                                                                            </span>
-                                                                        </>
-                                                                    )
-                                                                }
-                                                            })()}
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex w-1/4 flex-col truncate pt-2 pb-2">
-                                                        <a
-                                                            className="flex flex-row rounded bg-blue-500 p-1 text-sm"
-                                                            href={`https://zoom.us/wc/join/${
-                                                                e.passcode_hash
-                                                                    ? e.meeting_id + "?pwd=" + e.passcode_hash
-                                                                    : e.meeting_id
-                                                            }`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            onClick={() => {
-                                                                if (e.passcode) {
-                                                                    navigator.clipboard.writeText(e.passcode)
-                                                                }
-                                                            }}
-                                                        >
-                                                            <span className="hidden overflow-hidden 2xl:inline">
-                                                                Open in Browser
-                                                            </span>
-                                                            <span className="inline 2xl:hidden">Browser</span>
-                                                            <div className="grow"></div>
-                                                            <ArrowUpRightIcon className="inline h-5" />
-                                                        </a>
-                                                        <a
-                                                            className="mt-2 flex flex-row rounded bg-blue-500 p-1 text-sm"
-                                                            href="zoomus://"
-                                                            onClick={() => {
-                                                                if (e.passcode) {
-                                                                    navigator.clipboard.writeText(e.passcode)
-                                                                }
-                                                            }}
-                                                        >
-                                                            <span className="hidden overflow-hidden 2xl:inline">
-                                                                Open in App
-                                                            </span>
-                                                            <span className="inline 2xl:hidden">App</span>
-                                                            <div className="grow"></div>
-                                                            <ComputerDesktopIcon className="inline h-5" />
-                                                        </a>
-                                                    </div>
-                                                </div>
+                                                <EntryElement e={e} reload={reload} setReload={setReload} key={e.id} />
                                             )
                                         })
                                     )}
