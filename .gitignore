@@ -1,5 +1,6 @@
 vendor
 zoom-link-server
+zoom-link-server-arm
 .env
 database.db
 .idea

@@ -37,7 +37,6 @@ function App() {
 
     function create_entry() {
         setLoadingCreate(true)
-        //console.log(addMeetingID, ":", parseInt(addMeetingID))
         axios
             .post(url + "/api/create", {
                 description: addDescription,
