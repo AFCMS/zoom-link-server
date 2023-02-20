@@ -64,6 +64,8 @@ Here is an exemple file tree:
 
 The database is a SQLite database stored in the same folder and named `database.db`.
 
+You can found an exemple Systemd Unit file in the repo.
+
 ## Credits
 
 <a href="https://www.flaticon.com/free-icons/zoom" title="zoom icons">Zoom icons created by Enamo Studios - Flaticon</a>

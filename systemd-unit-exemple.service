@@ -1,0 +1,11 @@
+[Unit]
+Description=Zoom Link Server
+After=syslog.target network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+ExecStart=/opt/zoom-link-server/zoom-link-server
+
+[Install]
+WantedBy=default.target
