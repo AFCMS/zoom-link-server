@@ -3,7 +3,7 @@ import "./App.css"
 import { useEffect, useState } from "react"
 import { PlusIcon, CommandLineIcon, ExclamationTriangleIcon } from "@heroicons/react/24/solid"
 import EntryElement from "./EntryElement"
-import { Entry, match_regex, validate_id, apiUrl } from "./utils"
+import { VERSION, Entry, match_regex, validate_id, apiUrl } from "./utils"
 
 function App() {
     const url = apiUrl()
@@ -93,7 +93,7 @@ function App() {
                             className="text-right text-blue-800 md:block"
                             href="https://github.com/AFCMS/zoom-link-server"
                         >
-                            <span className="hidden md:inline">Made by AFCM</span>
+                            <span className="hidden md:inline">v{VERSION} - Made by AFCM</span>
                             <CommandLineIcon className="h-8 w-8 md:hidden" />
                         </a>
                     </div>

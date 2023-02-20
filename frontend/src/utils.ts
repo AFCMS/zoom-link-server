@@ -1,5 +1,7 @@
 import isDev from "./is_dev"
 
+const VERSION = "1.0"
+
 const regexZoomURL = /zoom\.us\/j\/(\d+)(?:\?pwd=(.+))/
 
 function match_regex(val: string): number | null {
@@ -28,6 +30,6 @@ type Entry = {
     passcode_hash: string
 }
 
-export { regexZoomURL, match_regex, validate_id, apiUrl }
+export { VERSION, regexZoomURL, match_regex, validate_id, apiUrl }
 
 export type { Entry }
