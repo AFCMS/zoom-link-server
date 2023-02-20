@@ -14,7 +14,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.18
+          go-version: 1.20
 
       - name: Set up NodeJS
         uses: actions/setup-node@v3
@@ -40,6 +40,10 @@ jobs:
         run: |
           go get zoom-link-server
 
-      - name: Build Go
+      - name: Build Go (Linux AMD64)
         run: |
-          go build -v ./...
+          env GOOS=linux GOARCH=amd64 go build -o zoom-link-server
+      
+      - name: Build Go (RasberryPi ARM)
+        run: |
+          env GOOS=linux GOARCH=arm GOARM=5 go build -o zoom-link-server-arm
