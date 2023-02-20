@@ -1,10 +1,40 @@
 import isDev from "./is_dev"
 
+/**
+ * The version of the app, MUST be updated before each release
+ */
 const VERSION = "1.0"
+
+/**
+ * Limit user input to valid meeting id
+ * @param val The user entry
+ */
+function validate_id(val: string): boolean {
+    // Validate string lenght
+    if (val.length > 10) {
+        return false
+    }
+
+    // Validate integer parsing
+    if (val.length === 0) {
+        return true
+    }
+
+    let pid = parseInt(val, 10)
+    if (isNaN(pid) || pid.toString().length !== val.length) {
+        return false
+    }
+
+    return true
+}
 
 const zoomDomain = /zoom\.us/
 const zoomJoinUrl1 = /\/j\/(\d+)/
 
+/**
+ * Parse a zoom meeting URL, return an object with the id and passcode hash if present or nill if URL is invalid
+ * @param val Zoom Meeting URL
+ */
 function parse_zoom_link(val: string): { id: number; passcode_hash: string | null } | null {
     try {
         const c = new URL(val)
@@ -18,7 +48,7 @@ function parse_zoom_link(val: string): { id: number; passcode_hash: string | nul
 
             // TODO: match second url sheme
 
-            if (meeting_id && !isNaN(parseInt(meeting_id))) {
+            if (meeting_id && validate_id(meeting_id) && meeting_id.length === 10) {
                 meeting_passcode_hash = c.searchParams.get("pwd")
 
                 return { id: parseInt(meeting_id), passcode_hash: meeting_passcode_hash }
@@ -33,18 +63,16 @@ function parse_zoom_link(val: string): { id: number; passcode_hash: string | nul
     }
 }
 
-function validate_id(val: string): boolean {
-    if (val.length >= 0 && val.length <= 10) {
-        return !!(parseInt(val, 10) || val.length === 0)
-    } else {
-        return false
-    }
-}
-
+/**
+ * @returns The API URL `"http://127.0.0.1:30000"` if in dev mode else `""`
+ */
 function apiUrl(): string {
     return isDev() ? "http://127.0.0.1:30000" : ""
 }
 
+/**
+ * Similar to the database model, represent an entry
+ */
 type Entry = {
     id: number
     description: string
