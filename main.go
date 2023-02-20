@@ -44,6 +44,7 @@ func main() {
 				CreationDate: b[i].CreationDate,
 				MeetingID:    b[i].MeetingID,
 				Passcode:     b[i].Passcode,
+				PasscodeHash: b[i].PasscodeHash,
 			})
 		}
 

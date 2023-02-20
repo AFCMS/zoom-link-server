@@ -15,7 +15,7 @@ type Entry struct {
 	CreationDate int64  `gorm:"not null"`
 	MeetingID    int64  `gorm:"not null;check:meeting_id between 0 and 9999999999"`
 	Passcode     string `gorm:""`
-	PasscodeHash string
+	PasscodeHash string `gorm:""`
 }
 
 func InitDatabase() *gorm.DB {
