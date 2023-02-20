@@ -3,7 +3,7 @@ import "./App.css"
 import { useEffect, useState } from "react"
 import { PlusIcon, CommandLineIcon, ExclamationTriangleIcon } from "@heroicons/react/24/solid"
 import EntryElement from "./EntryElement"
-import { VERSION, Entry, match_regex, validate_id, apiUrl } from "./utils"
+import { VERSION, Entry, parse_zoom_link, validate_id, apiUrl } from "./utils"
 
 function App() {
     const url = apiUrl()
@@ -128,9 +128,13 @@ function App() {
                             type="text"
                             className="zl-text-field-paste justify-center rounded bg-slate-400 p-1 text-center"
                             onPaste={(e) => {
-                                console.log(e.clipboardData.getData("Text"))
+                                // console.log(e.clipboardData.getData("Text"))
                                 var t = e.clipboardData.getData("Text")
-                                var r = match_regex(t)
+                                var r = parse_zoom_link(t)
+                                if (r != null) {
+                                    setAddMeetingID(r.id.toString())
+                                    setAddPasscodeHash(r.passcode_hash ? r.passcode_hash : "")
+                                }
                             }}
                             onChange={() => {}}
                             value={""}

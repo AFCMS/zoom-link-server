@@ -2,12 +2,35 @@ import isDev from "./is_dev"
 
 const VERSION = "1.0"
 
-const regexZoomURL = /zoom\.us\/j\/(\d+)(?:\?pwd=(.+))/
+const zoomDomain = /zoom\.us/
+const zoomJoinUrl1 = /\/j\/(\d+)/
 
-function match_regex(val: string): number | null {
-    var r = regexZoomURL.exec(val)
-    console.log(r)
-    return r ? parseInt(r[0]) : null
+function parse_zoom_link(val: string): { id: number; passcode_hash: string | null } | null {
+    try {
+        const c = new URL(val)
+        if (zoomDomain.exec(c.host)) {
+            let meeting_id: string | null = null
+            let meeting_passcode_hash: string | null = null
+            let r = zoomJoinUrl1.exec(c.pathname)
+            if (r) {
+                meeting_id = r[1]
+            }
+
+            // TODO: match second url sheme
+
+            if (meeting_id && !isNaN(parseInt(meeting_id))) {
+                meeting_passcode_hash = c.searchParams.get("pwd")
+
+                return { id: parseInt(meeting_id), passcode_hash: meeting_passcode_hash }
+            } else {
+                return null
+            }
+        } else {
+            return null
+        }
+    } catch {
+        return null
+    }
 }
 
 function validate_id(val: string): boolean {
@@ -30,6 +53,6 @@ type Entry = {
     passcode_hash: string
 }
 
-export { VERSION, regexZoomURL, match_regex, validate_id, apiUrl }
+export { VERSION, parse_zoom_link, validate_id, apiUrl }
 
 export type { Entry }
