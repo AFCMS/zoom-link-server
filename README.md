@@ -4,9 +4,9 @@ Simple Zoom link sharing server.
 
 Uses the following technologies:
 
--   **Golang** with the **Fiber** and **GORM** frameworks for the backend
--   **ReactJS** for frontend with the **Vite** framework.
--   **TailwindCSS** for all CSS
+- **Golang** with the **Fiber** and **GORM** frameworks for the backend
+- **ReactJS** for frontend with the **Vite** framework.
+- **TailwindCSS** for all CSS
 
 ## Installation / Usage
 
