@@ -8,7 +8,7 @@ Uses the following technologies:
 - **ReactJS** for frontend with the **Vite** framework.
 - **TailwindCSS** for all CSS
 
-## Installation / Usage
+## Running
 
 You first need to build the frontend.
 
@@ -41,6 +41,28 @@ Then running the server is as simple as:
 ```
 
 You can configure host and port in a `.env.local`, default to `localhost` and `30000`.
+
+## Production Setup
+
+There are no dependencies needed to run the server.
+
+You need only the result of the frontend build (the `./frontend/build` folder after running `npm run build`) and the binary compiled for your system.
+
+Here is an exemple file tree:
+
+```
+ ├──    .env.local
+ └──    frontend/
+ │  └────    assets/
+ │  │  ├────    index-564d9bf7.css
+ │  │  └────    index-f8707454.js
+ │  ├────    index.html
+ │  ├────    robots.txt
+ │  └────    zoom-link-server-icon.png
+ └──    zoom-link-server
+```
+
+The database is a SQLite database stored in the same folder and named `database.db`.
 
 ## Credits
 
