@@ -115,8 +115,8 @@ func main() {
 	app.Static("/", "./frontend/build")
 	app.Static("*", "./frontend/build/index.html")
 
-	log.Println(os.Getenv("ZLS_HOST"))
-	log.Println(string(os.Getenv("ZLS_HOST")) + ":" + string(os.Getenv("ZLS_PORT")))
+	// log.Println(os.Getenv("ZLS_HOST"))
+	// log.Println(string(os.Getenv("ZLS_HOST")) + ":" + string(os.Getenv("ZLS_PORT")))
 
 	log.Fatal(app.Listen(string(os.Getenv("ZLS_HOST")) + ":" + string(os.Getenv("ZLS_PORT"))))
 }
