@@ -48,11 +48,16 @@ jobs:
             frontend/build
             zoom-link-server-amd64
 
+      - name: Install Build Dependencies (RasberryPi ARM)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-linux-gnueabi
+
       - name: Build Go (RasberryPi ARM)
         run: |
-          env GOOS=linux GOARCH=arm GOARM=5 CGO_ENABLED=1 go build -o zoom-link-server-arm -v ./...
+          env GOOS=linux GOARCH=arm GOARM=5 CGO_ENABLED=1 CC=arm-linux-gnueabi-gcc go build -o zoom-link-server-arm -v ./...
 
-      - name: Upload Build Files (Linux ARM)
+      - name: Upload Build Files (RasberryPi ARM)
         uses: actions/upload-artifact@v3
         with:
           name: zoom-link-server-linux-arm
