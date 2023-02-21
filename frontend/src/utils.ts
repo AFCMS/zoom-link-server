@@ -3,7 +3,7 @@ import isDev from "./is_dev"
 /**
  * The version of the app, MUST be updated before each release
  */
-const VERSION = "1.0"
+const VERSION = "1.2"
 
 /**
  * Limit user input to valid meeting id
