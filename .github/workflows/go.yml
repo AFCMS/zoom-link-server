@@ -39,23 +39,23 @@ jobs:
       - name: Build Go (Linux AMD64)
         run: |
           env GOOS=linux GOARCH=amd64 go build -o zoom-link-server-amd64 -v ./...
-      
+
       - name: Upload Build Files (Linux AMD64)
         uses: actions/upload-artifact@v3
         with:
           name: zoom-link-server-linux-amd64
           path: |
-            frontend/buid
+            frontend/build
             zoom-link-server-amd64
-      
+
       - name: Build Go (RasberryPi ARM)
         run: |
           env GOOS=linux GOARCH=arm GOARM=5 go build -o zoom-link-server-arm -v ./...
-      
+
       - name: Upload Build Files (Linux ARM)
         uses: actions/upload-artifact@v3
         with:
           name: zoom-link-server-linux-arm
           path: |
-            frontend/buid
+            frontend/build
             zoom-link-server-arm
