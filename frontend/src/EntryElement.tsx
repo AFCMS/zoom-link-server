@@ -103,8 +103,8 @@ function EntryElement(props: { e: Entry; reload: number; setReload: React.Dispat
                 <div className="flex w-1/4 flex-col truncate pt-2 pb-2">
                     <a
                         className="flex flex-row rounded bg-blue-500 p-1 text-sm"
-                        href={`https://zoom.us/wc/join/${
-                            e.passcode_hash ? e.meeting_id + "?pwd=" + e.passcode_hash : e.meeting_id
+                        href={`https://zoom.us/wc/${
+                            e.passcode_hash ? e.meeting_id + "/join?pwd=" + e.passcode_hash : e.meeting_id
                         }`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -121,7 +121,9 @@ function EntryElement(props: { e: Entry; reload: number; setReload: React.Dispat
                     </a>
                     <a
                         className="mt-2 flex flex-row rounded bg-blue-500 p-1 text-sm"
-                        href="zoomus://"
+                        href={`zoommtg://zoom.us/join?action=join&confno=${e.meeting_id}${
+                            e.passcode ? "&pwd=" + e.passcode : ""
+                        }`}
                         onClick={() => {
                             if (e.passcode) {
                                 navigator.clipboard.writeText(e.passcode)
