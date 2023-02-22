@@ -30,6 +30,7 @@ function validate_id(val: string): boolean {
 
 const zoomDomain = /zoom\.us/
 const zoomJoinUrl1 = /\/j\/(\d+)/
+const zoomJoinUrl2 = /\/wc\/(\d+)\/join/
 
 /**
  * Parse a zoom meeting URL, return an object with the id and passcode hash if present or nill if URL is invalid
@@ -41,12 +42,15 @@ function parse_zoom_link(val: string): { id: number; passcode_hash: string | nul
         if (zoomDomain.exec(c.host)) {
             let meeting_id: string | null = null
             let meeting_passcode_hash: string | null = null
-            let r = zoomJoinUrl1.exec(c.pathname)
-            if (r) {
-                meeting_id = r[1]
+            let r1 = zoomJoinUrl1.exec(c.pathname)
+            if (r1) {
+                meeting_id = r1[1]
             }
 
-            // TODO: match second url sheme
+            let r2 = zoomJoinUrl2.exec(c.pathname)
+            if (r2) {
+                meeting_id = r2[1]
+            }
 
             if (meeting_id && validate_id(meeting_id) && meeting_id.length === 10) {
                 meeting_passcode_hash = c.searchParams.get("pwd")
