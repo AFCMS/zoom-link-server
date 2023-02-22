@@ -208,9 +208,18 @@ function App() {
                         <span className="ml-2 inline">{addError}</span>
                     </div>
                     <button
-                        className={`mt-2 h-8 w-full rounded bg-slate-700 ${
+                        className={`mt-2 h-8 w-full rounded bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-600 ${
                             loadingCreate ? "cursor-wait" : "cursor-default"
                         }`}
+                        disabled={(() => {
+                            if (
+                                !(validate_id(addMeetingID) && addMeetingID.length === 10 && addDescription.length > 0)
+                            ) {
+                                return true
+                            } else {
+                                return false
+                            }
+                        })()}
                         onClick={(e) => {
                             create_entry()
                         }}

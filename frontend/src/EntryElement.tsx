@@ -84,7 +84,7 @@ function EntryElement(props: { e: Entry; reload: number; setReload: React.Dispat
                             />
                         </div>
                     </div>
-                    <div className="text-start mt-1 h-max truncate text-lg text-slate-700">
+                    <div className="mt-1 h-max truncate text-start text-lg text-slate-700">
                         <span className="mr-4">Meeting ID:</span>
                         <span className="mr-4">{e.meeting_id}</span>
 
@@ -217,9 +217,22 @@ function EntryElement(props: { e: Entry; reload: number; setReload: React.Dispat
                         Cancel
                     </button>
                     <button
-                        className={`mt-2 h-8 w-full rounded bg-slate-700 ${
+                        className={`mt-2 h-8 w-full rounded bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-600 ${
                             loadingEdit ? "cursor-wait" : "cursor-default"
                         }`}
+                        disabled={(() => {
+                            if (
+                                !(
+                                    validate_id(editMeetingID) &&
+                                    editMeetingID.length === 10 &&
+                                    editDescription.length > 0
+                                )
+                            ) {
+                                return true
+                            } else {
+                                return false
+                            }
+                        })()}
                         onClick={edit_entry}
                     >
                         {loadingEdit ? "Loading..." : "Save"}
