@@ -4,9 +4,9 @@ Simple Zoom link sharing server.
 
 Uses the following technologies:
 
-- **Golang** with the **Fiber** and **GORM** frameworks for the backend
-- **ReactJS** for frontend with the **Vite** framework.
-- **TailwindCSS** for all CSS
+-   **Golang** with the **Fiber** and **GORM** frameworks for the backend
+-   **ReactJS** for frontend with the **Vite** framework.
+-   **TailwindCSS** for all CSS
 
 ## Running
 
@@ -64,7 +64,7 @@ Here is an exemple file tree:
 
 The database is a SQLite database stored in the same folder and named `database.db`.
 
-You can found an exemple Systemd Unit file in the repo.
+You can found an exemple Systemd Unit file in the repo, you may need to edit the file path.
 
 ## Credits
 
