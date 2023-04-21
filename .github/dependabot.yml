@@ -5,17 +5,11 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    assignees:
-      - "AFCMS"
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "daily"
-    assignees:
-      - "AFCMS"
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
       interval: "daily"
-    assignees:
-      - "AFCMS"
