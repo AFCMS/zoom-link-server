@@ -5,12 +5,12 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@tsconfig/vite-react": "^2.0.0",
-    "@vitejs/plugin-react": "^4.0.4",
+    "@vitejs/plugin-react": "^4.2.1",
     "axios": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-loading": "^2.0.3",
-    "vite": "^4.4.8",
+    "vite": "^5.0.12",
     "vite-plugin-svgr": "^3.2.0",
     "vite-tsconfig-paths": "^4.2.0"
   },
